@@ -8,9 +8,8 @@ from visualizer import Visualizer
 
 from fastf1.ergast import Ergast
 
-event = fastf1.get_session(2023, "Monza", "R")
+event = fastf1.get_event(2023, "Monza")
 
-event.load()
 
 verstappen = Visualizer(event, "VER")
 verstappen.plotDriverLaptimes()
