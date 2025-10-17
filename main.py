@@ -12,4 +12,4 @@ event = fastf1.get_event(2023, "Monza")
 
 
 verstappen = Visualizer(event, "VER")
-verstappen.plotDriverLaptimes()
+verstappen.plotFastestLaps(event.get_session("R"))

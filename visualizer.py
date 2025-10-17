@@ -48,6 +48,57 @@ class Visualizer:
         plt.ylabel("Lap Time (seconds)")
         plt.show()
 
+    def getFastestLaps(self, session):
+        """
+        Returns the fastest lap times of all drivers in a given F1 session.
+
+        Args:
+            session (fastf1.Session): F1 Session object
+
+        Returns:
+            Tuple[List[str], List[float]]: A tuple containing a list of driver names and a list of their fastest lap times
+        """
+
+        session.load()
+        drivers = list(session.laps["Driver"].unique())
+        driverFastestLaps = []
+        for driver in drivers:
+
+            driverFastestLap = session.laps.pick_driver(driver).pick_fastest()
+            if driverFastestLap is not None:
+                print(driverFastestLap.LapTime.total_seconds())
+                driverFastestLaps.append(driverFastestLap.LapTime.total_seconds())
+            else:
+                driverFastestLaps.append(0)
+
+        return (drivers, driverFastestLaps)
+
+    def plotFastestLaps(self, session):
+        """
+        Plots the fastest lap times of all drivers in a given F1 session.
+        Args:
+            session (fastf1.Session): F1 Session object
+
+        Returns:
+            None
+            Data Plot: Driver vs Fastest Lap Time (seconds)
+        """
+
+        drivers, lapTimes = self.getFastestLaps(session)
+
+        fastestPersonLapTime = min([time for time in lapTimes if time > 0])
+
+        lapTimeDiffs = [
+            (time - fastestPersonLapTime) if time > 0 else 0 for time in lapTimes
+        ]
+
+        plt.bar(drivers, lapTimeDiffs)
+        plt.xlabel("Driver")
+        plt.ylabel("Fastest Lap Time (seconds)")
+        plt.xticks(rotation=45)
+        plt.show()
+
     # All Charts for driver from for specified session
-    def plotAllSession(self, session):
+    def plotSessionAllChart(self, session):
         self.plotDriverLaptimes(session, self.driver)
+        self.plotFastestLaps(session)
